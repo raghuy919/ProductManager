@@ -53,6 +53,7 @@ public class AppController {
 	@GetMapping(value ="/delete/{id}")
 	public String deleteProduct(@PathVariable(name="id")Long id) {
 		service.delete(id);
+		System.out.println("deleted");
 		return "redirect:/";
 	}
 }
