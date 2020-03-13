@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,13 +14,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.codejava.ProductManager.model.domain.Product;
+import com.codejava.ProductManager.service.MailService;
 import com.codejava.ProductManager.service.ProductService;
+
+
+
+
+
 
 @Controller
 public class AppController {
 	
 	@Autowired
 	private ProductService service;
+	
+	@Autowired
+	private MailService mailService;
 		
 	@RequestMapping("/")
 	public String viewHomepage(Model model) {
@@ -39,6 +47,7 @@ public class AppController {
 	@PostMapping(value ="/save")
 	public String saveProduct(@ModelAttribute("product")Product product) {
 		service.save(product);
+		mailService.sendMail("yraghu919@gmail.com", "Product Saved", "product "+product.getName()+" added successfully");
 		return "redirect:/";
 	}
 	@RequestMapping("/edit/{id}")
@@ -53,7 +62,7 @@ public class AppController {
 	@GetMapping(value ="/delete/{id}")
 	public String deleteProduct(@PathVariable(name="id")Long id) {
 		service.delete(id);
-		System.out.println("deleted");
+		System.out.println();
 		return "redirect:/";
 	}
 }
